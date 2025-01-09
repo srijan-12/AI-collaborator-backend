@@ -10,6 +10,7 @@ import { Server } from 'socket.io'
 import { handleSocket } from './src/Controller/socket.controller.js'
 import jwt from 'jsonwebtoken'
 import Project from './src/Models/project.model.js'
+import User from './src/Models/user.model.js'
 const app = express()
 app.use(cors({
     origin:"http://localhost:5173",
@@ -44,7 +45,8 @@ io.use(async(socket,next)=>{
                 throw new Error('Autherization failed')
             }
             socket.project = foundProject
-            socket.user = decodedValue._id
+            const FoundUser = await User.findById(decodedValue._id)
+            socket.user = FoundUser
             next()
         }
     }catch(err){

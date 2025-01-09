@@ -7,9 +7,9 @@ export const handleSocket = (io) =>{
 
         socket.join(socket.project._id.toString())
 
-        socket.on('send-message', data =>{
-            // console.log(data, 'this is the message sent by', socket.user, 'in room id', socket.project._id.toString())
-            socket.broadcast.to(socket.project._id.toString()).emit('recieve-message',{data,user:socket.user})
+        socket.on('send-message', ({messageInput, messageSender}) =>{
+            console.log(messageInput, messageSender)
+            socket.broadcast.to(socket.project._id.toString()).emit('recieve-message',{data:messageInput, messageSender})
         })
 
         socket.on('disconnect', () => {
