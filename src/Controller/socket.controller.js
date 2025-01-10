@@ -1,4 +1,5 @@
 import { Socket } from "socket.io"
+import { generateResult } from "../Services/ai.services.js"
 
 
 export const handleSocket = (io) =>{
@@ -7,8 +8,15 @@ export const handleSocket = (io) =>{
 
         socket.join(socket.project._id.toString())
 
-        socket.on('send-message', ({messageInput, messageSender}) =>{
-            console.log(messageInput, messageSender)
+        socket.on('send-message', async({messageInput, messageSender}) =>{
+            if(messageInput.includes('@ai')) {
+                const requiredPrompt = messageInput.split('@ai')
+                const generatedRes = await generateResult(requiredPrompt[1])
+                return io.to(socket.project._id.toString()).emit('recieve-message',{data:generatedRes, messageSender:{
+                    _id : 'ai',
+                    email : 'AI'
+                }})
+            }
             socket.broadcast.to(socket.project._id.toString()).emit('recieve-message',{data:messageInput, messageSender})
         })
 
