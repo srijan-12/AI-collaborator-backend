@@ -14,6 +14,7 @@ export const handleSocket = (io) =>{
 
         socket.on('disconnect', () => {
             console.log(`A user is disconnected with socket id ${socket.id}`);
+            socket.leave(socket.project._id.toString())
           });
     })    
 }

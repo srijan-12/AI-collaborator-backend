@@ -11,6 +11,7 @@ import { handleSocket } from './src/Controller/socket.controller.js'
 import jwt from 'jsonwebtoken'
 import Project from './src/Models/project.model.js'
 import User from './src/Models/user.model.js'
+import aiRouter from './src/Controller/ai.controller.js'
 const app = express()
 app.use(cors({
     origin:"http://localhost:5173",
@@ -70,4 +71,5 @@ app.use(express.json())
 app.use(cookieParser())
 app.use("/api/user", userRouter)
 app.use('/api/project', projectRouter)
+app.use('/api/ai', aiRouter)
 handleSocket(io)
